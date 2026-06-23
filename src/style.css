@@ -1,0 +1,343 @@
+:root {
+  color-scheme: dark;
+  --bg: #050506;
+  --panel: #101214;
+  --panel-2: #171a1d;
+  --text: #e5e5d6;
+  --muted: #8b927f;
+  --green: #63d37a;
+  --amber: #d6b85a;
+  --red: #ff6a5f;
+  --line: #30363a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  background: radial-gradient(circle at 50% 0%, #182018 0%, var(--bg) 48%, #020202 100%);
+  color: var(--text);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  padding: 18px;
+}
+
+.stage-shell {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 12px;
+}
+
+.viewer-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.eyebrow,
+.viewer-header h1 {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--green);
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.viewer-header h1 {
+  font-size: clamp(1.35rem, 3vw, 2.35rem);
+  font-weight: 750;
+}
+
+.status-strip {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: end;
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+}
+
+.status-strip span {
+  min-width: 74px;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--green);
+  text-align: center;
+}
+
+.status-strip .warn {
+  color: var(--amber);
+}
+
+.viewer-frame {
+  position: relative;
+  width: min(100%, calc((100vh - 122px) * 4 / 3));
+  max-width: 1120px;
+  aspect-ratio: 4 / 3;
+  justify-self: center;
+  align-self: center;
+  overflow: hidden;
+  border: 1px solid #46524a;
+  border-radius: 8px;
+  background: #020202;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.46),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+#viewer-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.scanline-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 50%, rgba(0, 0, 0, 0.04) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.025), rgba(0, 255, 0, 0.018), rgba(0, 0, 255, 0.025));
+  background-size:
+    100% 4px,
+    7px 100%;
+  mix-blend-mode: screen;
+  opacity: 0.42;
+}
+
+.drop-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--green);
+  border-radius: 6px;
+  background: rgba(5, 12, 8, 0.72);
+  color: var(--green);
+  font-family: "Courier New", monospace;
+  font-size: clamp(1rem, 3vw, 2rem);
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.drop-overlay.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.status-line {
+  min-height: 22px;
+  margin: 0;
+  color: var(--muted);
+  font-family: "Courier New", monospace;
+  font-size: 0.82rem;
+}
+
+.status-line.is-error {
+  color: var(--red);
+}
+
+.control-panel {
+  min-width: 0;
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 120px),
+    var(--panel);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.panel-title {
+  display: grid;
+  gap: 3px;
+  padding: 8px 6px 12px;
+  border-bottom: 1px solid var(--line);
+  font-family: "Courier New", monospace;
+}
+
+.panel-title span {
+  color: var(--green);
+  font-size: 0.72rem;
+}
+
+.panel-title strong {
+  font-size: 1rem;
+}
+
+.panel-section {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-section:last-child {
+  border-bottom: 0;
+}
+
+.panel-section h2 {
+  margin: 0 0 10px;
+  color: var(--amber);
+  font-family: "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: minmax(118px, 1fr) minmax(0, 1.25fr) auto;
+  gap: 9px;
+  align-items: center;
+  min-height: 34px;
+  margin: 7px 0;
+  color: var(--text);
+  font-size: 0.84rem;
+}
+
+.control-row > span:first-child {
+  color: #c6c9bd;
+}
+
+.control-value {
+  min-width: 34px;
+  color: var(--green);
+  font-family: "Courier New", monospace;
+  text-align: right;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--green);
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  justify-self: end;
+  accent-color: var(--green);
+}
+
+input[type="color"] {
+  width: 100%;
+  min-width: 76px;
+  height: 28px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #060707;
+}
+
+select,
+.panel-button,
+.file-button {
+  min-height: 30px;
+  border: 1px solid #3b4741;
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+select {
+  width: 100%;
+  padding: 4px 8px;
+}
+
+.panel-button,
+.file-button {
+  cursor: pointer;
+  padding: 6px 10px;
+  transition:
+    border-color 120ms ease,
+    color 120ms ease,
+    background 120ms ease;
+}
+
+.panel-button {
+  width: 100%;
+  margin: 7px 0;
+}
+
+.file-button {
+  grid-column: 2 / 4;
+}
+
+.panel-button:hover,
+.file-button:hover {
+  border-color: var(--green);
+  background: #1a231d;
+  color: var(--green);
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .control-panel {
+    max-height: none;
+  }
+
+  .viewer-frame {
+    width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .app-shell {
+    padding: 10px;
+  }
+
+  .viewer-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .status-strip {
+    justify-content: start;
+  }
+
+  .control-row {
+    grid-template-columns: 1fr;
+  }
+
+  .file-button {
+    grid-column: auto;
+  }
+}

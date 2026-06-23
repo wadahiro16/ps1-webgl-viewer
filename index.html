@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PS1 WebGL Viewer</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="stage-shell" aria-label="3D viewer">
+        <header class="viewer-header">
+          <div>
+            <p class="eyebrow">WEBGL DEBUG STATION</p>
+            <h1>PS1 WebGL Viewer</h1>
+          </div>
+          <div class="status-strip">
+            <span id="fps-readout">FPS --</span>
+            <span id="model-readout">Cube</span>
+          </div>
+        </header>
+
+        <section id="viewer-frame" class="viewer-frame">
+          <canvas id="viewer-canvas"></canvas>
+          <div id="drop-overlay" class="drop-overlay">
+            <span>DROP MODEL FILES</span>
+          </div>
+          <div class="scanline-overlay" aria-hidden="true"></div>
+        </section>
+
+        <p id="status-line" class="status-line">
+          Ready. Load a model or drag files onto the viewport.
+        </p>
+      </main>
+
+      <aside id="ui-panel" class="control-panel" aria-label="Viewer controls"></aside>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
